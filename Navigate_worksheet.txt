@@ -1,0 +1,57 @@
+'@author Rayudu Addagara
+'Purpose Navigate worksheets macro and toolbar
+'Add this in Module1
+
+Sub JumpFirst()
+    Sheets(1).Activate
+End Sub
+
+Sub JumpCenter()
+    C = Round(Sheets.Count / 2, 0)
+    Sheets(C).Activate
+End Sub
+Sub JumpLast()
+    Sheets(Sheets.Count).Activate
+End Sub
+
+Sub JumpTo()
+    sheetNumber = InputBox("Enter sheet number to navigate", "Goto Sheet", 1)
+    If sheetNumber = "" Or sheetNumber < 1 Or sheetNumber > Sheets.Count Then
+    sheetNumber = 1 ' Defaulting to 1 if non realistic values entered
+    End If
+    If IsNumeric(Int(sheetNumber)) Then
+    Sheets(Int(sheetNumber)).Activate
+    End If
+End Sub
+
+Sub JumpToSheet()
+    Load UserForm1
+    LoadSheetNames
+    UserForm1.Show
+End Sub
+
+Sub ActivateSelectedSheet()
+    'MsgBox ("You have selected  " & UserForm1.sheetNamesList.ListIndex)
+    Sheets(Int(UserForm1.sheetNamesList.ListIndex + 1)).Activate
+End Sub
+
+Sub LoadSheetNames()
+Dim i As Integer, j As Integer: j = 1
+  For i = 1 To Sheets.Count
+     If Sheets(i).Visible = -1 Then
+        With UserForm1.sheetNamesList
+        .AddItem (Sheets(i).Name)
+        End With
+         j = j + 1
+     End If
+
+ Next
+
+End Sub
+
+
+'Keep this in UserForm1 code and make sure name the listcontrol sheetNamesList
+Private Sub sheetNamesList_Click()
+ActivateSelectedSheet
+Unload Me
+End Sub
